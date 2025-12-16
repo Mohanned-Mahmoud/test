@@ -3,37 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>وثيقة تعارف - أحمد طارق يوسف البدرى (معدل)</title>
+<title>وثيقة تعارف - أحمد طارق يوسف البدرى</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 <style>
-    /* استدعاء خط "Cairo" لضمان ظهور اللغة العربية بشكل ممتاز */
-    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+    /* Using 'Alyamama' font stack */
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap'); 
 
     body {
-        background-color: #555; /* لون خلفية لتمييز الورقة على الشاشة */
-        font-family: 'Alyamama'; /* خط القاهرة كأولوية */
+        background-color: #e0e0e0; /* خلفية رمادية للصفحة الخارجية للتمييز */
+        font-family: 'Alyamama';
         margin: 0;
         padding: 20px;
         display: flex;
         justify-content: center;
+        color: #000000;
     }
 
-    /* إعدادات الصفحة (A4) */
     .page {
         background-color: white;
-        width: 210mm;
-        min-height: 297mm;
-        padding: 15mm; /* هامش داخلي آمن */
+        width: 210mm; 
+        min-height: 297mm; 
+        padding: 15mm 15mm;
+        border: 1px solid #000; 
         box-sizing: border-box;
         position: relative;
-        box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* ظل خفيف للورقة */
     }
 
-    /* زر الطباعة */
-    .print-btn {
+    /* زر التحميل */
+    .download-btn {
         position: fixed;
-        bottom: 30px;
-        left: 30px;
-        background-color: #d32f2f;
+        bottom: 20px;
+        left: 20px;
+        background-color: #000;
         color: #fff;
         border: none;
         padding: 12px 24px;
@@ -41,28 +44,27 @@
         font-weight: bold;
         font-size: 16px;
         cursor: pointer;
-        border-radius: 50px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.3);
         z-index: 1000;
-        transition: transform 0.2s;
+        transition: background-color 0.3s;
     }
-    .print-btn:hover {
-        transform: scale(1.05);
-        background-color: #b71c1c;
+    .download-btn:hover {
+        background-color: #333;
     }
 
-    /* تنسيق الجداول العام */
+    /* --- Table Styles --- */
     table {
         width: 100%;
         border-collapse: collapse;
-        margin-bottom: 10px;
-        font-size: 14px; /* حجم خط مناسب للطباعة */
-        table-layout: fixed; /* تثبيت عرض الأعمدة لمنع التشوه */
+        margin-bottom: 8px; 
+        font-size: 15px; 
+        table-layout: fixed;
     }
 
     th, td {
         border: 1px solid #000;
-        padding: 4px 5px;
+        padding: 5px 6px;
         vertical-align: middle;
         overflow: hidden;
         word-wrap: break-word;
@@ -70,142 +72,91 @@
 
     th {
         background-color: transparent;
-        font-weight: 700;
-        text-align: right;
+        font-weight: 700; 
+        text-align: right; 
     }
 
     td {
-        height: 26px; /* ارتفاع الخانة */
-        font-weight: 600; /* جعل البيانات المدخلة سميكة قليلاً للقراءة */
+        height: 28px;
     }
 
-    /* --- تنسيق الهيدر العلوي (الإصلاح الرئيسي) --- */
+    /* --- Header Layout --- */
     .header-container {
         display: flex;
         justify-content: space-between;
-        align-items: center; /* محاذاة عمودية */
-        margin-bottom: 15px;
-        width: 100%;
+        align-items: flex-start;
+        margin-bottom: 0px; 
     }
 
-    /* الجزء الأيمن (فارغ للتوازن) */
-    .header-right-spacer {
-        width: 25%;
-    }
+    .header-right-spacer { width: 25%; }
+    .header-center { text-align: center; width: 50%; }
+    .header-left { width: 25%; }
 
-    /* الجزء الأوسط (العنوان) */
-    .header-center {
-        text-align: center;
-        width: 40%;
-    }
     .header-title {
-        font-size: 36px; /* خط كبير وواضح */
-        font-weight: 900;
-        text-decoration: none;
-        white-space: nowrap;
-    }
-
-    /* الجزء الأيسر (جدول السنة والسرية) */
-    .header-left {
-        width: 35%; /* زيادة العرض لمنع القص */
-        display: flex;
-        justify-content: flex-end; /* دفع المحتوى لليسار بصرياً */
-    }
-
-    /* جدول الإدارة المصغر */
-    .admin-table {
-        width: 100% !important; /* يأخذ مساحة القسم الأيسر */
-        margin-bottom: 0 !important;
-        font-size: 13px;
-    }
-    .admin-table th {
-        width: 40%;
-        text-align: center;
-        background-color: #f9f9f9;
-    }
-    .admin-table td {
-        text-align: center;
-        font-weight: 800;
-    }
-
-    /* عناوين الأقسام (بيانات الطالب...) */
-    .section-header {
-        font-weight: 900;
-        margin: 10px 0 5px 0;
-        font-size: 18px;
-        border-bottom: 1px solid #000; /* خط فاصل خفيف */
         display: inline-block;
-        padding-bottom: 2px;
+        padding: 5px 0; 
+        font-size: 32px; 
+        font-weight: 900; 
+        margin-top: 5px;
+        text-decoration: none;
     }
 
-    /* التذييل */
+    /* Admin Mini-Table */
+    .admin-table th { text-align: right; width: 35%; border: 1px solid #000; font-size: 14px; }
+    .admin-table td { border: 1px solid #000; text-align: center; font-weight: bold; }
+    .admin-table { margin-bottom: 0 !important; } 
+    
+    /* --- Section Headers --- */
+    .section-header {
+        font-weight: 900; 
+        margin: 2px 0 5px 0; 
+        font-size: 18px; 
+    }
+
+    /* --- Footer --- */
     .footer {
-        margin-top: 30px;
-        font-size: 16px;
-        line-height: 1.8;
+        margin-top: 20px;
+        font-size: 16px; 
+        line-height: 1.6;
     }
     .signature-row {
         display: flex;
         justify-content: space-between;
-        margin-top: 50px;
+        margin-top: 40px; 
         padding: 0 40px;
     }
     .signature-block {
         text-align: center;
-        font-weight: 900;
-        font-size: 18px;
+        font-weight: 900; 
+        font-size: 16px; 
     }
 
     strong { font-weight: 900; }
 
-    /* --- ميديا الطباعة (Print CSS) --- */
+    /* --- Print Optimization --- */
     @media print {
-        @page {
-            size: A4;
-            margin: 0; /* إلغاء هوامش الطابعة الافتراضية */
-        }
-        body {
-            background-color: white;
-            padding: 0;
-            margin: 0;
-            -webkit-print-color-adjust: exact;
-        }
-        .page {
-            width: 210mm;
-            height: 297mm; /* إجبار الارتفاع ليكون صفحة واحدة */
-            margin: 0 auto;
-            border: none;
-            box-shadow: none;
-            padding: 10mm 15mm; /* هوامش الطباعة الآمنة */
-        }
-        .print-btn {
-            display: none;
-        }
-        /* منع ظهور مؤشر الكتابة عند الطباعة */
-        [contenteditable] {
-            outline: none;
-        }
+        body { padding: 0; margin: 0; background-color: white; }
+        .page { border: none; margin: 0; width: 100%; box-shadow: none; }
+        .download-btn { display: none; } /* إخفاء الزر عند الطباعة */
     }
 </style>
 </head>
 <body>
 
-<button onclick="window.print()" class="print-btn">🖨️ طباعة / حفظ كـ PDF</button>
+<button onclick="downloadPDF()" class="download-btn">⬇️ تحميل كملف PDF</button>
 
-<div class="page">
+<div class="page" id="document-content">
 
     <div class="header-container">
         <div class="header-right-spacer"></div>
-        
         <div class="header-center">
             <div class="header-title">وثيقة تعارف</div>
         </div>
-        
         <div class="header-left">
             <table class="admin-table">
-                <tr><th>السنة</th><td contenteditable="true">٢٠٢٥/٢٠٢٦</td></tr>
-                <tr><th>السرية</th><td contenteditable="true">١٧</td></tr>
-                <tr><th>المسلسل</th><td contenteditable="true">١٤</td></tr>
+                <tr><th> السنة</th><td contenteditable="true">٢٠٢٥/٢٠٢٦</td></tr>
+                <tr><th> السرية</th><td contenteditable="true">١٧</td></tr>
+                <tr><th> المسلسل</th><td contenteditable="true">١٤</td></tr>
             </table>
         </div>
     </div>
@@ -213,15 +164,15 @@
     <div class="section-header">بيانات الطالب :</div>
     <table>
         <colgroup>
-            <col style="width: 14%"> <col style="width: 20%"> 
-            <col style="width: 13%"> <col style="width: 18%"> 
-            <col style="width: 12%"> <col style="width: 23%"> 
+            <col style="width: 13%"> <col style="width: 17%"> 
+            <col style="width: 13%"> <col style="width: 17%"> 
+            <col style="width: 12%"> <col style="width: 28%"> 
         </colgroup>
         <tr>
             <th>الاسم رباعياً</th>
             <td colspan="3" contenteditable="true">أحمد طارق يوسف البدرى</td>
             <th>الرقم القومي</th>
-            <td contenteditable="true" style="font-family: sans-serif;">٣٠٦١١٢٧٢٦٠٠٢٧٢</td>
+            <td contenteditable="true">٣٠٦١١٢٧٢٦٠٠٢٧٢</td>
         </tr>
         <tr>
             <th>تاريخ الالتحاق</th>
@@ -255,13 +206,13 @@
         </tr>
         <tr>
             <th>البريد الإلكتروني</th>
-            <td colspan="5" contenteditable="true" style="direction: ltr; text-align: right; font-family: Arial, sans-serif;">at4705482@gmail.com</td>
+            <td colspan="5" contenteditable="true" style="direction: ltr; text-align: right;">at4705482@gmail.com</td>
         </tr>
         <tr>
-            <td colspan="6" style="height: auto; padding: 10px;">
+            <td colspan="6" style="height: auto; padding: 12px;">
                 <strong>في حالة الاستدعاء أو الطوارئ أو الأمور العاجلة، يتم التواصل مع:</strong>
                 <br>
-                <div style="display:flex; justify-content: space-between; margin-top: 5px; padding-left: 10px;">
+                <div style="display:flex; justify-content: space-between; margin-top: 8px; padding-left: 20px;">
                     <span style="width: 60%;">الاسم: <span contenteditable="true">محمود عبدالفتاح مصطفى محمد</span></span>
                     <span style="width: 35%;">درجة القرابة: <span contenteditable="true">زوج الخالة</span></span>
                 </div>
@@ -272,9 +223,9 @@
     <div class="section-header">بيانات الأب والأم :</div>
     <table>
         <colgroup>
-            <col style="width: 18%"> <col style="width: 41%"> <col style="width: 41%">
+            <col style="width: 20%"> <col style="width: 40%"> <col style="width: 40%">
         </colgroup>
-        <tr style="text-align: center; background-color: #f2f2f2;">
+        <tr style="text-align: center;">
             <th style="text-align: center;">البيان</th>
             <th style="text-align: center;">الأب</th>
             <th style="text-align: center;">الأم</th>
@@ -282,7 +233,7 @@
         <tr> <th>الاسم رباعياً</th> <td contenteditable="true">طارق يوسف البدري حسن</td> <td contenteditable="true">منى رشاد احمد محمد</td> </tr>
         <tr> <th>الرقم القومى</th> <td contenteditable="true">٢٧١١١٢٧٢٦٠٠٠٩٩</td> <td contenteditable="true">٢٧٨١١١٦٢٩٠٠٠٦١</td> </tr>
         <tr> <th>الوظيفة</th> <td contenteditable="true">مراقب مخازن بالهيئة العامة للتأمين الصحي</td> <td contenteditable="true">وكيلة مدرسة</td> </tr>
-        <tr> <th>المؤهل</th> <td contenteditable="true">دبلوم صناعي قسم تبريد وتكييف</td> <td contenteditable="true">بكالوريوس تربية تعليم اساسي لغة انجليزية</td> </tr>
+        <tr> <th>المؤهل</th> <td contenteditable="true">دبلوم صناعي قسم تبريد و تكييف</td> <td contenteditable="true">بكالوريوس تربية تعليم اساسي لغة انجليزية</td> </tr>
         <tr> <th>الهاتف المحمول</th> <td contenteditable="true">٠١٢٢٧٢٠٤٢٣٠</td> <td contenteditable="true">٠١١١٤٣٣٩٥٣٠</td> </tr>
         <tr> <th>محل الإقامة</th> <td contenteditable="true">ش الجرجاوية الشرقى عمارة اولاد طبزه</td> <td contenteditable="true">ش الجرجاوية الشرقى عمارة اولاد طبزه</td> </tr>
     </table>
@@ -290,9 +241,9 @@
     <div class="section-header">بيانات الإخوة والأخوات :</div>
     <table>
         <colgroup>
-            <col style="width: 35%"> <col style="width: 25%"> <col style="width: 20%"> <col style="width: 20%">
+            <col style="width: 40%"> <col style="width: 20%"> <col style="width: 20%"> <col style="width: 20%">
         </colgroup>
-        <tr style="text-align: center; background-color: #f2f2f2;">
+        <tr style="text-align: center;">
             <th style="text-align: center;">الاسم رباعياً</th>
             <th style="text-align: center;">الرقم القومى</th>
             <th style="text-align: center;">الهاتف المحمول</th>
@@ -306,38 +257,55 @@
     <div class="section-header">بيانات ولى الأمر والمراسل (إن وجد) :</div>
     <table>
         <colgroup>
-            <col style="width: 18%"> <col style="width: 41%"> <col style="width: 41%">
+            <col style="width: 20%"> <col style="width: 40%"> <col style="width: 40%">
         </colgroup>
-        <tr style="text-align: center; background-color: #f2f2f2;">
+        <tr style="text-align: center;">
             <th style="text-align: center;">البيان</th>
             <th style="text-align: center;">ولى الأمر ( في حالة وفاة الأب )</th>
-            <th style="text-align: center;">المراسل المتواجد بالقاهرة (لطلبة المحافظات)</th>
+            <th style="text-align: center;">المراسل المتواجد بالقاهرة (خاص بطلبة المحافظات )</th>
         </tr>
         <tr> <th>الاسم رباعياً</th> <td contenteditable="true">طارق يوسف البدري حسن</td> <td contenteditable="true">محمود عبدالفتاح مصطفى محمد</td> </tr>
         <tr> <th>الرقم القومى</th> <td contenteditable="true">٢٧١١١٢٧٢٦٠٠٠٩٩</td> <td contenteditable="true"></td> </tr>
-        <tr> <th>الوظيفة</th> <td contenteditable="true">مراقب مخازن</td> <td contenteditable="true"></td> </tr>
+        <tr> <th>الوظيفة</th> <td contenteditable="true">مراقب مخازن بالهيئة العامة للتأمين الصحي </td> <td contenteditable="true"></td> </tr>
         <tr> <th>درجة القرابة</th> <td contenteditable="true">الوالد</td> <td contenteditable="true">زوج الخالة</td> </tr>
         <tr> <th>الهاتف المحمول</th> <td contenteditable="true">٠١٢٢٧٢٠٤٢٣٠</td> <td contenteditable="true"></td> </tr>
-        <tr> <th>محل الإقامة</th> <td contenteditable="true">ش الجرجاوية الشرقى</td> <td contenteditable="true"></td> </tr>
+        <tr> <th>محل الإقامة</th> <td contenteditable="true">ش الجرجاوية الشرقى عمارة اولاد طبزه</td> <td contenteditable="true"> اطبزه</td> </tr>
     </table>
 
     <div class="footer">
-        أقر أنا الطالب / <span contenteditable="true" style="display:inline-block; min-width: 250px; font-weight: bold; border-bottom: 1px dotted #000;">أحمد طارق يوسف البدرى</span> بأن البيانات المدونة في هذه الوثيقة كاملة وصحيحة.
+        أقر أنا الطالب / <span contenteditable="true" style="display:inline-block; min-width: 300px; font-weight: bold;">أحمد طارق يوسف البدرى</span> بأن البيانات المدونة في هذه الوثيقة كاملة وصحيحة.
 
         <div class="signature-row">
             <div class="signature-block">
                 توقيع الطالب:<br><br>
-                ..................................
             </div>
             <div class="signature-block">
                 يعتمد<br>
                 قائد السرية<br><br>
-                ..................................
             </div>
         </div>
     </div>
 
 </div>
+
+<script>
+    function downloadPDF() {
+        // تحديد العنصر المراد تحويله (الصفحة فقط)
+        const element = document.getElementById('document-content');
+        
+        // إعدادات التحويل
+        const opt = {
+            margin:       0,
+            filename:     'وثيقة_تعارف_أحمد_طارق.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true }, // scale: 2 لجودة أعلى
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        // التنفيذ
+        html2pdf().set(opt).from(element).save();
+    }
+</script>
 
 </body>
 </html>
