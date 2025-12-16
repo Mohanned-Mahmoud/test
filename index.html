@@ -4,15 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>وثيقة تعارف - أحمد طارق يوسف البدرى</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
-    /* Using 'Alyamama' font stack */
+    /* استيراد خط القاهرة كبديل قوي وواضح للغة العربية */
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap'); 
 
     body {
-        background-color: #e0e0e0; /* خلفية رمادية للصفحة الخارجية للتمييز */
-        font-family: 'Alyamama';
+        background-color: #555; /* خلفية داكنة للتمييز أثناء المعاينة */
+        font-family: 'Alyamama', 'Cairo', 'Traditional Arabic', 'Tahoma', 'Arial', sans-serif;
         margin: 0;
         padding: 20px;
         display: flex;
@@ -25,35 +24,36 @@
         width: 210mm; 
         min-height: 297mm; 
         padding: 15mm 15mm;
-        border: 1px solid #000; 
         box-sizing: border-box;
         position: relative;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* ظل خفيف للورقة */
+        /* حدود الصفحة للمعاينة فقط */
+        box-shadow: 0 0 15px rgba(0,0,0,0.5); 
     }
 
-    /* زر التحميل */
-    .download-btn {
+    /* زر الطباعة المخصص */
+    .print-btn {
         position: fixed;
-        bottom: 20px;
-        left: 20px;
-        background-color: #000;
+        bottom: 30px;
+        left: 30px;
+        background-color: #d32f2f;
         color: #fff;
         border: none;
-        padding: 12px 24px;
+        padding: 15px 25px;
         font-family: 'Cairo', sans-serif;
         font-weight: bold;
-        font-size: 16px;
+        font-size: 18px;
         cursor: pointer;
-        border-radius: 5px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        border-radius: 50px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.4);
         z-index: 1000;
-        transition: background-color 0.3s;
+        transition: transform 0.2s, background-color 0.2s;
     }
-    .download-btn:hover {
-        background-color: #333;
+    .print-btn:hover {
+        transform: scale(1.05);
+        background-color: #b71c1c;
     }
 
-    /* --- Table Styles --- */
+    /* تنسيق الجداول */
     table {
         width: 100%;
         border-collapse: collapse;
@@ -64,7 +64,7 @@
 
     th, td {
         border: 1px solid #000;
-        padding: 5px 6px;
+        padding: 4px 6px;
         vertical-align: middle;
         overflow: hidden;
         word-wrap: break-word;
@@ -77,10 +77,11 @@
     }
 
     td {
-        height: 28px;
+        height: 26px;
+        padding-top: 2px;
     }
 
-    /* --- Header Layout --- */
+    /* تنسيق الهيدر */
     .header-container {
         display: flex;
         justify-content: space-between;
@@ -101,19 +102,19 @@
         text-decoration: none;
     }
 
-    /* Admin Mini-Table */
+    /* جدول الإدارة المصغر */
     .admin-table th { text-align: right; width: 35%; border: 1px solid #000; font-size: 14px; }
     .admin-table td { border: 1px solid #000; text-align: center; font-weight: bold; }
     .admin-table { margin-bottom: 0 !important; } 
     
-    /* --- Section Headers --- */
+    /* عناوين الأقسام */
     .section-header {
         font-weight: 900; 
-        margin: 2px 0 5px 0; 
+        margin: 5px 0 5px 0; 
         font-size: 18px; 
     }
 
-    /* --- Footer --- */
+    /* التذييل */
     .footer {
         margin-top: 20px;
         font-size: 16px; 
@@ -133,19 +134,43 @@
 
     strong { font-weight: 900; }
 
-    /* --- Print Optimization --- */
+    /* --- إعدادات الطباعة (السر في حفظ الملف بشكل صحيح) --- */
     @media print {
-        body { padding: 0; margin: 0; background-color: white; }
-        .page { border: none; margin: 0; width: 100%; box-shadow: none; }
-        .download-btn { display: none; } /* إخفاء الزر عند الطباعة */
+        @page {
+            size: A4;
+            margin: 0; /* إلغاء هوامش المتصفح الافتراضية */
+        }
+        body {
+            background-color: white;
+            padding: 0;
+            margin: 0;
+            /* لضمان طباعة الألوان والخلفيات بدقة */
+            -webkit-print-color-adjust: exact; 
+            print-color-adjust: exact;
+        }
+        .page {
+            width: 100%;
+            height: auto;
+            border: none;
+            margin: 0;
+            box-shadow: none;
+            padding: 10mm 15mm; /* هوامش المستند الفعلية */
+        }
+        .print-btn {
+            display: none !important; /* إخفاء الزر عند الطباعة */
+        }
+        /* إزالة حدود التركيز عن الحقول عند الطباعة */
+        [contenteditable]:focus {
+            outline: none;
+        }
     }
 </style>
 </head>
 <body>
 
-<button onclick="downloadPDF()" class="download-btn">⬇️ تحميل كملف PDF</button>
+<button onclick="window.print()" class="print-btn">🖨️ طباعة / حفظ كـ PDF</button>
 
-<div class="page" id="document-content">
+<div class="page">
 
     <div class="header-container">
         <div class="header-right-spacer"></div>
@@ -206,13 +231,13 @@
         </tr>
         <tr>
             <th>البريد الإلكتروني</th>
-            <td colspan="5" contenteditable="true" style="direction: ltr; text-align: right;">at4705482@gmail.com</td>
+            <td colspan="5" contenteditable="true" style="direction: ltr; text-align: right; font-family: Arial, sans-serif;">at4705482@gmail.com</td>
         </tr>
         <tr>
-            <td colspan="6" style="height: auto; padding: 12px;">
+            <td colspan="6" style="height: auto; padding: 10px;">
                 <strong>في حالة الاستدعاء أو الطوارئ أو الأمور العاجلة، يتم التواصل مع:</strong>
                 <br>
-                <div style="display:flex; justify-content: space-between; margin-top: 8px; padding-left: 20px;">
+                <div style="display:flex; justify-content: space-between; margin-top: 5px; padding-left: 20px;">
                     <span style="width: 60%;">الاسم: <span contenteditable="true">محمود عبدالفتاح مصطفى محمد</span></span>
                     <span style="width: 35%;">درجة القرابة: <span contenteditable="true">زوج الخالة</span></span>
                 </div>
@@ -266,10 +291,10 @@
         </tr>
         <tr> <th>الاسم رباعياً</th> <td contenteditable="true">طارق يوسف البدري حسن</td> <td contenteditable="true">محمود عبدالفتاح مصطفى محمد</td> </tr>
         <tr> <th>الرقم القومى</th> <td contenteditable="true">٢٧١١١٢٧٢٦٠٠٠٩٩</td> <td contenteditable="true"></td> </tr>
-        <tr> <th>الوظيفة</th> <td contenteditable="true">مراقب مخازن بالهيئة العامة للتأمين الصحي </td> <td contenteditable="true"></td> </tr>
+        <tr> <th>الوظيفة</th> <td contenteditable="true">مراقب مخازن بالهيئة العامة للتأمين الصحي</td> <td contenteditable="true"></td> </tr>
         <tr> <th>درجة القرابة</th> <td contenteditable="true">الوالد</td> <td contenteditable="true">زوج الخالة</td> </tr>
         <tr> <th>الهاتف المحمول</th> <td contenteditable="true">٠١٢٢٧٢٠٤٢٣٠</td> <td contenteditable="true"></td> </tr>
-        <tr> <th>محل الإقامة</th> <td contenteditable="true">ش الجرجاوية الشرقى عمارة اولاد طبزه</td> <td contenteditable="true"> اطبزه</td> </tr>
+        <tr> <th>محل الإقامة</th> <td contenteditable="true">ش الجرجاوية الشرقى عمارة اولاد طبزه</td> <td contenteditable="true"></td> </tr>
     </table>
 
     <div class="footer">
@@ -278,34 +303,17 @@
         <div class="signature-row">
             <div class="signature-block">
                 توقيع الطالب:<br><br>
+                ..................................
             </div>
             <div class="signature-block">
                 يعتمد<br>
                 قائد السرية<br><br>
+                ..................................
             </div>
         </div>
     </div>
 
 </div>
-
-<script>
-    function downloadPDF() {
-        // تحديد العنصر المراد تحويله (الصفحة فقط)
-        const element = document.getElementById('document-content');
-        
-        // إعدادات التحويل
-        const opt = {
-            margin:       0,
-            filename:     'وثيقة_تعارف_أحمد_طارق.pdf',
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, useCORS: true }, // scale: 2 لجودة أعلى
-            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
-
-        // التنفيذ
-        html2pdf().set(opt).from(element).save();
-    }
-</script>
 
 </body>
 </html>
